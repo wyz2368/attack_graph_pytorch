@@ -1,1 +1,0 @@
-Currently these scripts require that you have already activated your development environment prior to execution.

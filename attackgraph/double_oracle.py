@@ -131,7 +131,7 @@ def _run(env, game, meta_method_name, epoch: int = 1, game_path: str = None, n_p
 
     selector = meta_method_selector(meta_method_name)
 
-    count = 50
+    count = 80
     while count != 0:
         mem0 = proc.memory_info().rss
 
@@ -139,14 +139,14 @@ def _run(env, game, meta_method_name, epoch: int = 1, game_path: str = None, n_p
         mix_str_def, mix_str_att = selector.sample(game, epoch)
 
         # Save mixed strategies.
-        with open(osp.join(result_dir, f"mix_defender.{epoch}.pkl"), "wb") as outfile:
-            pickle.dump(mix_str_def, outfile)
-        with open(osp.join(result_dir, f"mix_attacker.{epoch}.pkl"), "wb") as outfile:
-            pickle.dump(mix_str_att, outfile)
-        with open(osp.join(result_dir, f"payoff_defender.{epoch}.pkl"), "wb") as outfile:
-            pickle.dump(game.payoffmatrix_def, outfile)
-        with open(osp.join(result_dir, f"payoff_attacker.{epoch}.pkl"), "wb") as outfile:
-            pickle.dump(game.payoffmatrix_att, outfile)
+        # with open(osp.join(result_dir, f"mix_defender.{epoch}.pkl"), "wb") as outfile:
+        #     pickle.dump(mix_str_def, outfile)
+        # with open(osp.join(result_dir, f"mix_attacker.{epoch}.pkl"), "wb") as outfile:
+        #     pickle.dump(mix_str_att, outfile)
+        # with open(osp.join(result_dir, f"payoff_defender.{epoch}.pkl"), "wb") as outfile:
+        #     pickle.dump(game.payoffmatrix_def, outfile)
+        # with open(osp.join(result_dir, f"payoff_attacker.{epoch}.pkl"), "wb") as outfile:
+        #     pickle.dump(game.payoffmatrix_att, outfile)
 
         # Equilibrium pay-off.
         aPayoff, dPayoff = util.payoff_mixed_NE(game, epoch)

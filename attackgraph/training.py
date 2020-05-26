@@ -45,5 +45,5 @@ def train(game, identity, opponent_mix_str, epoch, writer, save_path: str = None
         policy, best_deviation, replay_buffer, report = learner.learn_multi_nets(env, epoch=epoch, writer=writer)
 
     torch.save(policy, save_path, pickle_module=dill)
-    fp.save_pkl(replay_buffer, save_path[:-4]+".replay_buffer.pkl")
+    # fp.save_pkl(replay_buffer, save_path[:-4]+".replay_buffer.pkl")
     return best_deviation, report
