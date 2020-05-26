@@ -1,0 +1,62 @@
+import attackgraph
+import attackgraph.rl.dqn
+import attackgraph.rl.learner
+import attackgraph.rl.learner_factory
+import attackgraph.rl.external_configurables
+import attackgraph.empirical_game
+import torch
+
+_train_classifier.buffer_paths = [
+    "/home/mxsmith/projects/attack_graph/data/eval_qmix/10_07_qmix/att_epoch1.best_response.replay_buffer.pkl",
+    "/home/mxsmith/projects/attack_graph/data/eval_qmix/10_07_qmix/att_epoch3.best_response.replay_buffer.pkl",
+    "/home/mxsmith/projects/attack_graph/data/eval_qmix/10_07_qmix/att_epoch7.best_response.replay_buffer.pkl"
+]
+_train_classifier.mixture = [0.3, 0.5, 0.2]
+_train_classifier.test_split = 0.1
+_train_classifier.training_attacker = False
+
+# Training parameters.
+supervised_learning.criterion = @torch.nn.CrossEntropyLoss()
+supervised_learning.n_epochs = 100
+supervised_learning.batch_size = 64
+supervised_learning.eval_freq = 100
+
+# Classifier parameters.
+MLP.input_size = 211
+MLP.hidden_sizes = [128, 128]
+MLP.output_size = 3
+
+# Q-Mixture and simulation opponents.
+make_qmix_and_simulate.q_funcs = [
+    "/home/mxsmith/projects/attack_graph/data/eval_qmix/10_07_qmix/att_epoch1.best_response.pkl",
+    "/home/mxsmith/projects/attack_graph/data/eval_qmix/10_07_qmix/att_epoch3.best_response.pkl",
+    "/home/mxsmith/projects/attack_graph/data/eval_qmix/10_07_qmix/att_epoch7.best_response.pkl"
+]
+make_qmix_and_simulate.opponent_paths = [
+    "/home/mxsmith/projects/attack_graph/data/evaluation_opponents/attackers/09_30_egta_dqn_att_epoch1.pkl",
+    "/home/mxsmith/projects/attack_graph/data/evaluation_opponents/attackers/09_30_egta_dqn_att_epoch3.pkl",
+    "/home/mxsmith/projects/attack_graph/data/evaluation_opponents/attackers/09_30_egta_dqn_att_epoch7.pkl"
+]
+make_qmix_and_simulate.mixture = [0.3, 0.5, 0.2]
+
+opp_0/make_qmix_and_simulate.opponent_paths = [
+    "/home/mxsmith/projects/attack_graph/data/evaluation_opponents/attackers/09_30_egta_dqn_att_epoch1.pkl",
+]
+opp_0/make_qmix_and_simulate.opponent_mixture = [1.0]
+
+opp_1/make_qmix_and_simulate.opponent_paths = [
+    "/home/mxsmith/projects/attack_graph/data/evaluation_opponents/attackers/09_30_egta_dqn_att_epoch3.pkl",
+]
+opp_1/make_qmix_and_simulate.opponent_mixture = [1.0]
+
+opp_2/make_qmix_and_simulate.opponent_paths = [
+    "/home/mxsmith/projects/attack_graph/data/evaluation_opponents/attackers/09_30_egta_dqn_att_epoch7.pkl",
+]
+opp_2/make_qmix_and_simulate.opponent_mixture = [1.0]
+
+simulate_rewards.is_attacker = False
+
+
+# Simulation.
+EmpiricalGame.num_episodes = 250
+EmpiricalGame.threshold = 0.11

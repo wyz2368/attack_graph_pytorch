@@ -1,0 +1,57 @@
+import attackgraph
+import attackgraph.rl.dqn
+import attackgraph.rl.learner
+import attackgraph.rl.learner_factory
+import attackgraph.rl.modules.mlp
+import attackgraph.rl.external_configurables
+import attackgraph.empirical_game
+
+# Evaluation.
+evaluate_qmix.train_attacker = True
+evaluate_qmix.opponent_paths = [
+    "/home/mxsmith/projects/attack_graph/data/eval_qmix/10_08_costly/def_str_epoch2.pkl",
+    "/home/mxsmith/projects/attack_graph/data/eval_qmix/10_08_costly/def_str_epoch4.pkl",
+    "/home/mxsmith/projects/attack_graph/data/eval_qmix/10_08_costly/def_str_epoch6.pkl"
+]
+evaluate_qmix.mixture = [0.3, 0.5, 0.2]
+evaluate_qmix.n_processes = 2
+
+
+# Learning algorithm ("DQN" or "DQNEncDec").
+learner_factory.policy_type = "DQN"
+
+Learner.buffer_size = 30000
+Learner.gamma = 0.99
+Learner.prioritized_replay = False
+Learner.exploration_final_eps = 0.03
+Learner.param_noise = False
+Learner.train_freq = 1
+Learner.print_freq = 250
+Learner.checkpoint_freq = None
+Learner.batch_size = 32
+Learner.progress_bar = False
+Learner.total_timesteps = 1000000
+Learner.exploration_fraction = 0.3
+
+
+# Policy.
+DQN.lr = 5e-5
+DQN.hidden_sizes = [256, 256]
+DQN.grad_norm_clipping = 10
+DQN.gpu = None
+
+DQNEncDec.q_lr = 0.0005
+DQNEncDec.encoder_lr = 0.0005
+DQNEncDec.grad_norm_clipping = 10
+DQNEncDec.hidden_sizes = [256, 256]
+DQNEncDec.state_embed_dim = 124
+DQNEncDec.gpu = None
+
+
+# Modules.
+MLP.hidden_activation = @tanh
+
+
+# Simulation.
+EmpiricalGame.num_episodes = 250
+EmpiricalGame.threshold = 0.11

@@ -1,0 +1,54 @@
+import attackgraph
+import attackgraph.rl.dqn
+import attackgraph.rl.learner
+import attackgraph.rl.learner_factory
+import attackgraph.rl.modules.mlp
+import attackgraph.rl.external_configurables
+import attackgraph.empirical_game
+
+
+# EGTA algorithm.
+attackgraph.mixed_opponent.run.n_processes = 1
+attackgraph.mixed_opponent.run.perform_policy_distillation = True
+attackgraph.mixed_opponent.run.policy_ctor = @DQN
+
+# Learning algorithm ("DQN" or "DQNEncDec").
+learner_factory.policy_type = "DQN"
+
+Learner.gamma = 0.99
+Learner.prioritized_replay = False
+Learner.exploration_final_eps = 0.03
+Learner.param_noise = False
+Learner.train_freq = 5
+Learner.print_freq = 250
+Learner.checkpoint_freq = None
+Learner.progress_bar = True
+
+attacker/Learner.total_timesteps = 2000
+attacker/Learner.exploration_fraction = 0.3
+
+defender/Learner.total_timesteps = 2000
+defender/Learner.exploration_fraction = 0.5
+
+
+# Policy.
+DQN.lr = 5e-5
+DQN.hidden_sizes = [256, 256]
+DQN.grad_norm_clipping = 10
+DQN.gpu = None
+
+DQNEncDec.q_lr = 5e-5
+DQNEncDec.encoder_lr = 5e-5
+DQNEncDec.grad_norm_clipping = 10
+DQNEncDec.hidden_sizes = [256, 256]
+DQNEncDec.state_embed_dim = 124
+DQNEncDec.gpu = None
+
+
+# Modules.
+MLP.hidden_activation = @relu
+
+
+# Simulation.
+EmpiricalGame.num_episodes = 10
+EmpiricalGame.threshold = 0.11

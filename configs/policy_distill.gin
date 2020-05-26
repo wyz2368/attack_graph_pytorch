@@ -1,0 +1,49 @@
+import attackgraph
+import attackgraph.rl.dqn.dqn
+import attackgraph.rl.learner
+import attackgraph.rl.learner_factory
+import attackgraph.rl.modules.mlp
+import attackgraph.rl.external_configurables
+import attackgraph.empirical_game
+
+
+# Teacher/Student configuration.
+_policy_distillation.buffer_paths = [
+    "/home/mxsmith/projects/attack_graph/data/eval_qmix/10_07_qmix/att_epoch1.best_response.replay_buffer.pkl",
+    "/home/mxsmith/projects/attack_graph/data/eval_qmix/10_07_qmix/att_epoch3.best_response.replay_buffer.pkl",
+    "/home/mxsmith/projects/attack_graph/data/eval_qmix/10_07_qmix/att_epoch7.best_response.replay_buffer.pkl"]
+_policy_distillation.teacher_path = "/home/mxsmith/projects/attack_graph/data/eval_qmix/10_07_qmix/qmix.pkl"
+_policy_distillation.target_path = "/home/mxsmith/projects/attack_graph/data/eval_qmix/10_07_qmix/mixture.best_response.pkl"
+_policy_distillation.training_attacker = False
+
+
+# Policy Distillation learning parameters.
+distill_policy.n_epochs = 100
+distill_policy.batch_size = 64
+distill_policy.learning_rate = 0.003
+
+
+# Evaluation opponents.
+simulate_rewards.opponent_paths = [
+    "/home/mxsmith/projects/attack_graph/data/evaluation_opponents/attackers/09_30_egta_dqn_att_epoch1.pkl",
+    "/home/mxsmith/projects/attack_graph/data/evaluation_opponents/attackers/09_30_egta_dqn_att_epoch3.pkl",
+    "/home/mxsmith/projects/attack_graph/data/evaluation_opponents/attackers/09_30_egta_dqn_att_epoch7.pkl"]
+simulate_rewards.mixture = [0.3, 0.5, 0.2]
+simulate_rewards.is_attacker = False
+
+
+# Policy.
+DQN.lr = 5e-5
+DQN.hidden_sizes = [256, 256]
+DQN.grad_norm_clipping = 10
+DQN.gpu = None
+DQN.eps = 0.03
+
+
+# Modules.
+MLP.hidden_activation = @tanh
+
+
+# Simulation.
+EmpiricalGame.num_episodes = 250
+EmpiricalGame.threshold = 0.11

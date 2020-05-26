@@ -1,0 +1,60 @@
+import attackgraph
+import attackgraph.rl.dqn
+import attackgraph.rl.learner
+import attackgraph.rl.learner_factory
+import attackgraph.rl.modules.mlp
+import attackgraph.rl.external_configurables
+import attackgraph.empirical_game
+
+# Evaluation.
+evaluate_qmix.train_attacker = True
+evaluate_qmix.opponent_paths = [
+    "/Users/max/projects/attack_graph/data/evaluation_opponents/defenders/def_str_epoch1.pkl"
+]
+evaluate_qmix.mixture = [1.0]
+evaluate_qmix.n_processes = 1
+
+
+# Simulation.
+EmpiricalGame.num_episodes = 250
+EmpiricalGame.threshold = 0.11
+
+
+# Shared parameters across both the Pure-BR and Mixture-BR
+learner_factory.policy_type = "DQN"
+
+Learner.buffer_size = 30000
+Learner.gamma = 0.99
+Learner.prioritized_replay = False
+Learner.exploration_final_eps = 0.03
+Learner.param_noise = False
+Learner.train_freq = 1
+Learner.print_freq = 250
+Learner.checkpoint_freq = None
+Learner.batch_size = 32
+Learner.progress_bar = False
+Learner.learning_starts = 500
+Learner.total_timesteps = 1000
+Learner.exploration_fraction = 0.5
+
+DQN.lr = 5e-5
+DQN.hidden_sizes = [256, 256]
+DQN.grad_norm_clipping = 10
+DQN.gpu = None
+
+DQNEncDec.q_lr = 5e-5
+DQNEncDec.encoder_lr = 5e-5
+DQNEncDec.grad_norm_clipping = 10
+DQNEncDec.hidden_sizes = [256, 256]
+DQNEncDec.state_embed_dim = 124
+DQNEncDec.gpu = None
+
+MLP.hidden_activation = @tanh
+
+
+# Pure-BR parameter overrides. Prefix is "pure".
+pure/DQN.lr = 1
+
+
+# Mixture-BR parameter overrides. Prefix is "mix".
+mix/DQN.lr = 2

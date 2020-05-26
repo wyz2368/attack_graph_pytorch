@@ -1,0 +1,1 @@
+Static set of opponent policies used to compare learning algorithms.
