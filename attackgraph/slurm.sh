@@ -12,5 +12,5 @@
 
 module load python3.6-anaconda/5.2.0
 cd ${SLURM_SUBMIT_DIR}
-python egta_main.py --run_name=dqn --config_files=egta_do_dqn
+python egta_main.py --run_name=dqn --config_files=egta_do_dqn_small
 
