@@ -1,0 +1,41 @@
+# Policy distillition with local (laptop) paths. Meant for testing/debugging purposes.
+import attackgraph
+import attackgraph.rl.dqn
+import attackgraph.rl.learner
+import attackgraph.rl.learner_factory
+import attackgraph.rl.modules.mlp
+import attackgraph.rl.external_configurables
+import attackgraph.empirical_game
+
+
+# Teacher/Student configuration.
+_policy_distillation.student_ctor = @DQN
+_policy_distillation.buffer_paths = [
+    "/Users/max/projects/attack_graph/data/eval_qmix/10_07_qmix/att_epoch1.best_response.replay_buffer.pkl",
+    "/Users/max/projects/attack_graph/data/eval_qmix/10_07_qmix/att_epoch3.best_response.replay_buffer.pkl",
+    "/Users/max/projects/attack_graph/data/eval_qmix/10_07_qmix/att_epoch7.best_response.replay_buffer.pkl"
+]
+_policy_distillation.teacher_path = "/Users/max/projects/attack_graph/data/eval_qmix/10_07_qmix/qmix_local.pkl"
+_policy_distillation.target_path = "/Users/max/projects/attack_graph/data/eval_qmix/10_07_qmix/mixture.best_response.pkl"
+_policy_distillation.training_attacker = False
+
+
+# Policy Distillation learning parameters.
+distill_policy.n_epochs = 100
+distill_policy.batch_size = 64
+distill_policy.learning_rate = 0.003
+
+
+# Policy.
+DQN.lr = 5e-5
+DQN.hidden_sizes = [256, 256]
+DQN.grad_norm_clipping = 10
+DQN.gpu = None
+
+# Modules.
+MLP.hidden_activation = @tanh
+
+
+# Simulation.
+EmpiricalGame.num_episodes = 250
+EmpiricalGame.threshold = 0.11

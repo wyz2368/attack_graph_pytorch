@@ -1,0 +1,42 @@
+import attackgraph.soccer.training
+import attackgraph.rl.dqn.dqn
+import attackgraph.rl.modules.mlp
+import attackgraph.rl.external_configurables
+import attackgraph.empirical_game
+
+
+# Evaluation.
+evaluate_qmix.mixture = [0.2, 0.2, 0.2, 0.2, 0.2]
+
+# Learning algorithm
+Trainer.policy_ctor = @DQN
+Trainer.buffer_size = 30000
+Trainer.gamma = 0.99
+Trainer.prioritized_replay = False
+Trainer.exploration_final_eps = 0.03
+Trainer.param_noise = False
+Trainer.train_freq = 1
+Trainer.print_freq = 250
+Trainer.checkpoint_freq = None
+Trainer.batch_size = 32
+Trainer.progress_bar = False
+Trainer.learning_starts = 100
+pure/Trainer.total_timesteps = 1000
+mix/Trainer.total_timesteps = 5000
+Trainer.exploration_fraction = 0.3
+
+# Policy.
+DQN.lr = 5e-5
+DQN.input_size = 5
+DQN.hidden_sizes = [10, 10]
+DQN.output_size = 5
+DQN.is_attacker = False
+DQN.grad_norm_clipping = 10
+DQN.gpu = None
+
+# Modules.
+MLP.hidden_activation = @tanh
+
+# Simulation.
+EmpiricalGame.num_episodes = 250
+EmpiricalGame.threshold = 0.11

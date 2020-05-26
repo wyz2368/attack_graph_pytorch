@@ -1,0 +1,47 @@
+import attackgraph
+import attackgraph.rl.dqn
+import attackgraph.rl.learner
+import attackgraph.rl.learner_factory
+import attackgraph.rl.modules.mlp
+import attackgraph.rl.external_configurables
+import attackgraph.empirical_game
+
+
+# EGTA algorithm.
+attackgraph.double_oracle.run.n_processes = 2
+
+
+# Learning algorithm.
+learner_factory.policy_type = "DQN"
+
+Learner.buffer_size = 30000
+Learner.exploration_final_eps = 0.03
+Learner.train_freq = 1
+Learner.batch_size = 32
+Learner.print_freq = 250
+Learner.checkpoint_freq = 30000
+Learner.gamma = 0.99
+Learner.prioritized_replay = False
+Learner.param_noise = False
+
+attacker/Learner.total_timesteps = 700000
+attacker/Learner.exploration_fraction = 0.3
+
+defender/Learner.total_timesteps = 1000000
+defender/Learner.exploration_fraction = 0.5
+
+
+# Policy.
+DQN.hidden_sizes = [256, 256]
+DQN.grad_norm_clipping = 10
+DQN.lr = 5e-5
+DQN.gpu = None
+
+
+# Modules.
+MLP.hidden_activation = @tanh
+
+
+# Simulation.
+EmpiricalGame.num_episodes = 250
+EmpiricalGame.threshold = 0.1
