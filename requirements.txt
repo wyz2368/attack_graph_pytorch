@@ -24,6 +24,6 @@ tensorflow==1.14.0
 torch==1.1.0
 torchvision==0.3.0
 tqdm==4.32.2
-ujson==1.35
+ujson==5.2.0
 vulture==1.0
 wandb==0.8.9
